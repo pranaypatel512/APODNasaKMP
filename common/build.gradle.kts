@@ -1,4 +1,5 @@
 import org.jetbrains.compose.compose
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
@@ -14,36 +15,54 @@ kotlin {
     jvm("desktop") {
         jvmToolchain(11)
     }
+    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget = when {
+        System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
+        System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64
+        else -> ::iosX64
+    }
+    iosTarget("iOS") {}
+
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
-                api(compose.material)
-            }
+        sourceSets["commonMain"].dependencies {
+            implementation(libs.kotlinX.coroutines)
+
+            api(libs.koin.core)
+
+            api(libs.ktor.core)
+            api(libs.ktor.cio)
+            implementation(libs.ktor.contentNegotiation)
+            implementation(libs.ktor.json)
+            implementation(libs.ktor.logging)
+
+            implementation(libs.kotlinX.serializationJson)
+
+            implementation(libs.multiplatformSettings.noArg)
+            implementation(libs.multiplatformSettings.coroutines)
+
+            api(libs.napier)
+
+            implementation(libs.kotlinX.dateTime)
+            api(compose.runtime)
+            api(compose.foundation)
+            api(compose.material)
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        sourceSets["commonTest"].dependencies {
+            implementation(kotlin("test"))
         }
-        val androidMain by getting {
-            dependencies {
-                api("androidx.appcompat:appcompat:1.5.1")
-                api("androidx.core:core-ktx:1.9.0")
-            }
+
+        sourceSets["androidMain"].dependencies {
+            api(libs.appCompat)
+            api(libs.androidX.core)
         }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13.2")
-            }
+
+        sourceSets["androidTest"].dependencies {
+            implementation(libs.jUnit)
         }
-        val desktopMain by getting {
-            dependencies {
-                api(compose.preview)
-            }
+        sourceSets["desktopMain"].dependencies {
+            api(compose.preview)
         }
-        val desktopTest by getting
+        sourceSets["desktopTest"].dependencies {
+        }
     }
 }
 
