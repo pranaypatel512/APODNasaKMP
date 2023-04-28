@@ -32,6 +32,14 @@ allprojects {
     }
 }
 
+detekt {
+    buildUponDefaultConfig = true // preconfigure defaults
+    allRules = false // activate all available (even unstable) rules.
+    autoCorrect = true
+    parallel = true
+    config = files("config/detekt/detekt.yml")
+}
+
 subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
     detekt {
