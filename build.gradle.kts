@@ -11,6 +11,8 @@ plugins {
     id("org.jetbrains.compose") apply false
     alias(libs.plugins.ktLint)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.buildconfig)
+
 }
 
 allprojects {

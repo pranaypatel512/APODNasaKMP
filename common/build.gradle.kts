@@ -1,10 +1,12 @@
-import org.jetbrains.compose.compose
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    alias(libs.plugins.buildconfig)
 }
 
 group = "com.example"
@@ -39,7 +41,7 @@ kotlin {
             implementation(libs.multiplatformSettings.noArg)
             implementation(libs.multiplatformSettings.coroutines)
 
-            api(libs.napier)
+            implementation(libs.napier)
 
             implementation(libs.kotlinX.dateTime)
             api(compose.runtime)
@@ -63,9 +65,18 @@ kotlin {
         }
         sourceSets["desktopTest"].dependencies {
         }
+        sourceSets["iOSMain"].dependencies {
+        }
     }
 }
 
+buildConfig{
+    buildConfigField(
+        "String",
+        "API_KEY",
+        gradleLocalProperties(rootDir).getProperty("api_key") ?: ""
+    )
+}
 android {
     compileSdkVersion(33)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

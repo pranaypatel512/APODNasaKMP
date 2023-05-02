@@ -22,6 +22,7 @@ sqlDelight = "1.5.5"
 multiplatformSettings = "0.8.1"
 kmpNativeCoroutines = "0.12.1-new-mm"
 buildKonfig = "0.13.3"
+buildconfig = "4.0.3"
 kover = "0.6.1"
 mockk = "1.12.3"
 kotlinxTestResources = "0.2.2"
@@ -80,6 +81,7 @@ kotlinX-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization
 kmp-NativeCoroutines-plugin = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "kmpNativeCoroutines" }
 sqlDelight-plugin = { id = "com.squareup.sqldelight", version.ref = "sqlDelight" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 
 googleServices-plugin = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
