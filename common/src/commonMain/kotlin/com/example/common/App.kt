@@ -1,21 +1,37 @@
 package com.example.common
 
-import androidx.compose.material.Text
-import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
+import com.example.common.ui.navigation.AppNavigator
+import com.example.common.ui.navigation.RoutedContent
+import com.example.common.ui.navigation.Router
+import com.example.common.ui.navigation.rememberRouter
+import com.example.common.ui.screen.DetailsScreen
+import com.example.common.ui.screen.HomeScreen
+import com.example.common.ui.theme.APODNasaAndroidTheme
 
 @Composable
 fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
-    val platformName = getPlatformName()
-
-    Button(onClick = {
-        text = "Hello, ${platformName}"
-    }) {
-        Text(text)
+    APODNasaAndroidTheme {
+        Surface(color = MaterialTheme.colors.surface) {
+            val router: Router<AppNavigator> =
+                rememberRouter(AppNavigator::class, listOf(AppNavigator.APODPicturesListScreen))
+            RoutedContent(
+                router = router,
+                animation = stackAnimation(slide())
+            ) { screen ->
+                when (screen) {
+                    is AppNavigator.APODPictureOverview -> {
+                       DetailsScreen(screen.pictureItem)
+                    }
+                    AppNavigator.APODPicturesListScreen -> {
+                        HomeScreen()
+                    }
+                }
+            }
+        }
     }
 }

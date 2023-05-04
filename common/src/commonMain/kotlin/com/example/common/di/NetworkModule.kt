@@ -1,6 +1,6 @@
 package com.example.common.di
 
-import com.example.common.BuildConfig
+import APODNasaKMP.common.BuildConfig
 import com.example.common.utils.Constants.NASA_API_URL
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier

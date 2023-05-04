@@ -7,22 +7,37 @@ plugins {
     id("org.jetbrains.compose")
     id("com.android.library")
     alias(libs.plugins.buildconfig)
+    kotlin("native.cocoapods")
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization") version "1.8.20"
 }
-
-group = "com.example"
-version = "1.0-SNAPSHOT"
 
 kotlin {
     android()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods {
+        version = "1.0.0"
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "common"
+            isStatic = true
+            export("com.arkivanov.decompose:decompose:2.0.0-compose-experimental-alpha-02")
+            export("com.arkivanov.decompose:extensions-compose-jetbrains:2.0.0-compose-experimental-alpha-02")
+            export("com.arkivanov.essenty:parcelable:1.1.0")
+        }
+        extraSpecAttributes["resources"] =
+            "['src/commonMain/resources/**', 'src/iOSMain/resources/**']"
+    }
+
     jvm("desktop") {
         jvmToolchain(11)
     }
-    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget = when {
-        System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
-        System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64
-        else -> ::iosX64
-    }
-    iosTarget("iOS") {}
 
     sourceSets {
         sourceSets["commonMain"].dependencies {
@@ -47,9 +62,9 @@ kotlin {
             api(compose.runtime)
             api(compose.foundation)
             api(compose.material)
-        }
-        sourceSets["commonTest"].dependencies {
-            implementation(kotlin("test"))
+            api(libs.decompose)
+            api(libs.decompose.compose.jetbrains)
+            api(libs.essenty)
         }
 
         sourceSets["androidMain"].dependencies {
@@ -57,15 +72,18 @@ kotlin {
             api(libs.androidX.core)
         }
 
-        sourceSets["androidTest"].dependencies {
-            implementation(libs.jUnit)
-        }
-        sourceSets["desktopMain"].dependencies {
-            api(compose.preview)
-        }
-        sourceSets["desktopTest"].dependencies {
-        }
-        sourceSets["iOSMain"].dependencies {
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+
+        sourceSets.create("iOSMain").apply {
+            dependsOn(sourceSets.getByName("commonMain"))
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                api(libs.ktor.darwin)
+            }
         }
     }
 }
@@ -78,14 +96,19 @@ buildConfig{
     )
 }
 android {
-    compileSdkVersion(33)
+    compileSdk = (findProperty("android.compileSdk") as String).toInt()
+    namespace = "com.example.common"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(33)
+        minSdk = (findProperty("android.minSdk") as String).toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlin {
+        jvmToolchain(11)
     }
 }

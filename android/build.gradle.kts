@@ -1,7 +1,22 @@
 plugins {
+    kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.application")
-    kotlin("android")
+    id("kotlin-parcelize")
+}
+
+val koinVersion = "3.2.0"
+kotlin {
+    android()
+    sourceSets {
+        val androidMain by getting {
+            dependencies {
+                implementation(project(":common"))
+                implementation(libs.decompose)
+                implementation(libs.ktor.cio)
+            }
+        }
+    }
 }
 
 group = "com.example"
