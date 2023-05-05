@@ -45,7 +45,7 @@ composeConstraintLayout = "1.0.0-rc01"
 accompanist = "0.25.1"
 navigation = "2.4.0-alpha02"
 lifecycle = "2.3.1"
-coil = "1.4.0"
+coil = "2.3.0"
 palette = "1.0.0"
 paging = "3.0.0"
 coroutines = "1.5.2"
@@ -138,6 +138,7 @@ accompanist-animation = { module = "com.google.accompanist:accompanist-navigatio
 accompanist-systemUIController = { module = "com.google.accompanist:accompanist-systemuicontroller", version = "0.17.0" }
 accompanist-materialPlaceHolder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 accompanist-pagerIndicator = { module = "com.google.accompanist:accompanist-pager-indicators", version = "0.22.0-rc" }
+accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version = "0.31.1-alpha" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinCompose" }

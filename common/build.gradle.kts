@@ -68,14 +68,22 @@ kotlin {
         }
 
         sourceSets["androidMain"].dependencies {
+            api(libs.compose.activity)
             api(libs.appCompat)
             api(libs.androidX.core)
+            implementation(libs.koin.android)
+            implementation(libs.coil)
         }
 
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
 
+        sourceSets["desktopMain"].apply {
+            dependencies {
+                implementation(libs.coil)
+            }
+        }
         sourceSets.create("iOSMain").apply {
             dependsOn(sourceSets.getByName("commonMain"))
             iosX64Main.dependsOn(this)

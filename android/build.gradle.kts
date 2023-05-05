@@ -13,40 +13,31 @@ kotlin {
             dependencies {
                 implementation(project(":common"))
                 implementation(libs.decompose)
+                implementation(libs.koin.android)
                 implementation(libs.ktor.cio)
             }
         }
     }
 }
 
-group = "com.example"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    jcenter()
-}
-
-dependencies {
-    implementation(project(":common"))
-    implementation("androidx.activity:activity-compose:1.5.0")
-}
-
 android {
-    compileSdkVersion(33)
+    compileSdk = (findProperty("android.compileSdk") as String).toInt()
+    namespace = "com.example.android"
+
+    //sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+
     defaultConfig {
         applicationId = "com.example.android"
-        minSdkVersion(24)
-        targetSdkVersion(33)
+        minSdk = (findProperty("android.minSdk") as String).toInt()
+        targetSdk = (findProperty("android.targetSdk") as String).toInt()
         versionCode = 1
-        versionName = "1.0-SNAPSHOT"
+        versionName = "1.0"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
+    kotlin {
+        jvmToolchain(11)
     }
 }

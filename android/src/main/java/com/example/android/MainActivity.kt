@@ -1,6 +1,5 @@
 package com.example.android
 
-import com.example.common.App
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity

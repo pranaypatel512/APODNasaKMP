@@ -9,8 +9,8 @@ import com.example.common.ui.navigation.AppNavigator
 import com.example.common.ui.navigation.RoutedContent
 import com.example.common.ui.navigation.Router
 import com.example.common.ui.navigation.rememberRouter
-import com.example.common.ui.screen.DetailsScreen
-import com.example.common.ui.screen.HomeScreen
+import com.example.common.ui.screen.details.DetailsScreen
+import com.example.common.ui.screen.home.HomeScreen
 import com.example.common.ui.theme.APODNasaAndroidTheme
 
 @Composable
